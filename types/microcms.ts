@@ -1,13 +1,13 @@
 export interface Artwork {
   id: string;
   title: string;
-  slug: string;
+  slug?: string;
   images: {
     url: string;
     height: number;
     width: number;
   }[];
-  artist: Artist;
+  artist?: Artist | null;
   category: string;
   year?: string;
   material?: string;
@@ -36,7 +36,7 @@ export interface Artist {
 export interface News {
   id: string;
   title: string;
-  slug: string;
+  slug?: string;
   date: string;
   body: string;
   cover?: {

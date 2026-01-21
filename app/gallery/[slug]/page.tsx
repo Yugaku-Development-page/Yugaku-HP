@@ -1,7 +1,9 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getArtworkBySlug } from '@/lib/microcms';
+import { formatPrice } from '@/lib/format';
 import type { Metadata } from 'next';
+import ArtworkImageGallery from './ArtworkImageGallery';
 
 interface Props {
   params: {
@@ -18,11 +20,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
+  const artistName = artwork.artist?.name ?? 'アーティスト未設定';
+
   return {
-    title: `${artwork.title} | ${artwork.artist.name}`,
+    title: `${artwork.title} | ${artistName}`,
     description: artwork.description.substring(0, 160),
     openGraph: {
-      title: `${artwork.title} | ${artwork.artist.name}`,
+      title: `${artwork.title} | ${artistName}`,
       description: artwork.description.substring(0, 160),
       images: artwork.images[0]?.url ? [artwork.images[0].url] : [],
     },
@@ -58,43 +62,15 @@ export default async function ArtworkDetailPage({ params }: Props) {
         <div className="mx-auto max-w-4xl">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
             {/* 画像セクション */}
-            <div>
-              <div className="aspect-[4/3] w-full overflow-hidden rounded-2xl border border-slate-200/80 bg-gray-200 shadow-sm">
-                {artwork.images[0]?.url ? (
-                  <img
-                    src={artwork.images[0].url}
-                    alt={artwork.title}
-                    className="h-full w-full object-cover object-center"
-                  />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 text-slate-400">
-                    <i className="fas fa-image text-4xl"></i>
-                  </div>
-                )}
-              </div>
-              {artwork.images.length > 1 && (
-                <div className="mt-4 grid grid-cols-4 gap-3">
-                  {artwork.images.slice(1).map((image, index) => (
-                    <div
-                      key={index}
-                      className="aspect-square overflow-hidden rounded-lg border border-slate-200/80 bg-gray-200"
-                    >
-                      <img
-                        src={image.url}
-                        alt={`${artwork.title} - 画像${index + 2}`}
-                        className="h-full w-full object-cover object-center"
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            <ArtworkImageGallery images={artwork.images} title={artwork.title} />
 
             {/* 情報セクション */}
             <div>
               <div className="mb-6">
                 <h1 className="mb-2 text-3xl font-bold text-gray-900">{artwork.title}</h1>
-                <p className="text-lg text-gray-600">{artwork.artist.name}</p>
+                <p className="text-lg text-gray-600">
+                  {artwork.artist?.name ?? 'アーティスト未設定'}
+                </p>
               </div>
 
               <div className="mb-8 space-y-4 rounded-2xl border border-slate-200/70 bg-white/90 p-6 shadow-sm">
@@ -141,7 +117,9 @@ export default async function ArtworkDetailPage({ params }: Props) {
                 {artwork.price && (
                   <div className="flex items-center justify-between border-b border-gray-200 py-3">
                     <span className="text-sm font-medium text-gray-500">価格</span>
-                    <span className="text-lg font-semibold text-gray-900">{artwork.price}</span>
+                    <span className="text-lg font-semibold text-gray-900">
+                      {formatPrice(artwork.price)}
+                    </span>
                   </div>
                 )}
               </div>
