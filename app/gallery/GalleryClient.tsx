@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import type { Artwork, Artist } from '@/types/microcms';
+import { formatPrice } from '@/lib/format';
 
 interface FilterState {
   category: string;
@@ -22,13 +23,15 @@ export default function GalleryClient({ artworks, artists }: GalleryClientProps)
     status: '',
   });
 
-  const categories = useMemo(
-    () =>
-      Array.from(new Set(artworks.map((artwork) => artwork.category)))
-        .filter(Boolean)
-        .sort((a, b) => a.localeCompare(b, 'ja')),
-    [artworks],
-  );
+  const categories = useMemo(() => {
+    const normalized = artworks
+      .map((artwork) => artwork.category)
+      .filter((category): category is string => typeof category === 'string')
+      .map((category) => category.trim())
+      .filter(Boolean);
+
+    return Array.from(new Set(normalized)).sort((a, b) => a.localeCompare(b, 'ja'));
+  }, [artworks]);
 
   const statusLabels: Record<string, string> = {
     Available: '販売中',
@@ -43,7 +46,7 @@ export default function GalleryClient({ artworks, artists }: GalleryClientProps)
       filtered = filtered.filter((artwork) => artwork.category === filters.category);
     }
     if (filters.artist) {
-      filtered = filtered.filter((artwork) => artwork.artist.id === filters.artist);
+      filtered = filtered.filter((artwork) => artwork.artist?.id === filters.artist);
     }
     if (filters.status) {
       filtered = filtered.filter((artwork) => artwork.status === filters.status);
@@ -159,7 +162,7 @@ export default function GalleryClient({ artworks, artists }: GalleryClientProps)
               {filteredArtworks.map((artwork) => (
                 <Link
                   key={artwork.id}
-                  href={`/gallery/${artwork.slug}`}
+                  href={`/gallery/${artwork.slug ?? artwork.id}`}
                   className="group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm transition hover:-translate-y-1 hover:border-slate-300 hover:shadow-md"
                 >
                   <div className="aspect-[4/3] w-full overflow-hidden bg-slate-100">
@@ -181,7 +184,9 @@ export default function GalleryClient({ artworks, artists }: GalleryClientProps)
                         <h3 className="text-sm font-semibold text-slate-800">
                           {artwork.title}
                         </h3>
-                        <p className="mt-1 text-sm text-slate-500">{artwork.artist.name}</p>
+                        <p className="mt-1 text-sm text-slate-500">
+                          {artwork.artist?.name ?? 'アーティスト未設定'}
+                        </p>
                       </div>
                       <span
                         className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
@@ -198,7 +203,9 @@ export default function GalleryClient({ artworks, artists }: GalleryClientProps)
                     <div className="flex items-center justify-between text-sm text-slate-500">
                       <span>{artwork.year}</span>
                       {artwork.price && (
-                        <span className="font-medium text-slate-800">{artwork.price}</span>
+                        <span className="font-medium text-slate-800">
+                          {formatPrice(artwork.price)}
+                        </span>
                       )}
                     </div>
                   </div>

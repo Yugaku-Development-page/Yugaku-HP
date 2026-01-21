@@ -90,7 +90,7 @@ export default async function Home() {
                 {artworks.map((artwork) => (
                   <Link
                     key={artwork.id}
-                    href={`/gallery/${artwork.slug}`}
+                    href={`/gallery/${artwork.slug ?? artwork.id}`}
                     className="group overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm transition hover:-translate-y-1 hover:border-slate-300 hover:shadow-md"
                   >
                     <div className="aspect-[4/3] overflow-hidden bg-slate-100">
@@ -128,7 +128,7 @@ export default async function Home() {
                         </span>
                       </div>
                       <p className="mt-1 text-xs text-slate-500">
-                        {artwork.artist.name}
+                        {artwork.artist?.name ?? 'アーティスト未設定'}
                       </p>
                     </div>
                   </Link>
@@ -162,7 +162,7 @@ export default async function Home() {
                   >
                     <div className="flex flex-col gap-2 md:flex-row md:items-center">
                       <span className="text-sm text-slate-500">
-                        {new Date(item.date).toLocaleDateString('ja-JP', {
+                        {new Date(item.date ?? item.createdAt).toLocaleDateString('ja-JP', {
                           year: 'numeric',
                           month: '2-digit',
                           day: '2-digit',

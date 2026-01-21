@@ -7,6 +7,8 @@ export const metadata: Metadata = {
   description: '株式会社由岳の最新ニュース・お知らせ',
 };
 
+export const revalidate = 60;
+
 export default async function NewsPage() {
   const news = await getNews();
 
@@ -54,8 +56,8 @@ export default async function NewsPage() {
                     </div>
                   )}
                   <div className="flex items-center gap-x-4 text-xs">
-                    <time dateTime={item.date} className="text-gray-500">
-                      {new Date(item.date).toLocaleDateString('ja-JP', {
+                    <time dateTime={item.date ?? item.createdAt} className="text-gray-500">
+                      {new Date(item.date ?? item.createdAt).toLocaleDateString('ja-JP', {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric',

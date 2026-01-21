@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: newsItem.title,
       description: newsItem.body.replace(/<[^>]*>/g, '').substring(0, 160),
       type: 'article',
-      publishedTime: newsItem.date,
+      publishedTime: newsItem.date ?? newsItem.createdAt,
       images: newsItem.cover?.url ? [newsItem.cover.url] : [],
     },
   };
@@ -54,8 +54,8 @@ export default async function NewsDetailPage({ params }: Props) {
             ニュース一覧に戻る
           </Link>
           <div className="mt-6 flex items-center gap-x-4 text-xs text-slate-300">
-            <time dateTime={newsItem.date}>
-              {new Date(newsItem.date).toLocaleDateString('ja-JP', {
+            <time dateTime={newsItem.date ?? newsItem.createdAt}>
+              {new Date(newsItem.date ?? newsItem.createdAt).toLocaleDateString('ja-JP', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
