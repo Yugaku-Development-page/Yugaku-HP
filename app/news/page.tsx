@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { getNews } from '@/lib/microcms';
 import type { Metadata } from 'next';
-import ListPageNav from '@/components/ListPageNav';
 
 export const metadata: Metadata = {
   title: 'ニュース',
@@ -13,14 +12,6 @@ export default async function NewsPage() {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
-          <Link href="/" className="text-sm font-semibold tracking-wide text-slate-900">
-            株式会社由岳
-          </Link>
-          <ListPageNav />
-        </div>
-      </header>
       {/* ヒーローセクション */}
       <section className="bg-white">
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">

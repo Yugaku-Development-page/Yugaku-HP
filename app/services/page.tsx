@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
-import ListPageNav from '@/components/ListPageNav';
 
 export const metadata: Metadata = {
   title: '事業内容',
@@ -34,14 +33,6 @@ const serviceCards = [
 export default function ServicesPage() {
   return (
     <div className="bg-gray-50 min-h-screen">
-      <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
-          <Link href="/" className="text-sm font-semibold tracking-wide text-slate-900">
-            株式会社由岳
-          </Link>
-          <ListPageNav />
-        </div>
-      </header>
       {/* ヒーローセクション */}
       <section className="bg-gradient-to-br from-white via-white to-slate-100">
         <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
@@ -59,24 +50,26 @@ export default function ServicesPage() {
       {/* 事業一覧 */}
       <section className="section-padding">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid gap-8 md:grid-cols-3">
+          <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
             {serviceCards.map((service) => (
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}`}
-                className="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                className="group flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
               >
                 <div
-                  className="aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-slate-100 via-white to-slate-200"
+                  className="relative aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-slate-100 via-white to-slate-200"
                   style={{ backgroundImage: `url(${service.image})`, backgroundSize: 'cover' }}
                   aria-label={`${service.title}のイメージ`}
-                />
-                <div className="p-6">
-                  <h3 className="text-lg font-semibold text-gray-900">{service.title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-gray-600">
+                >
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent opacity-0 transition group-hover:opacity-100" />
+                </div>
+                <div className="flex flex-1 flex-col p-8">
+                  <h3 className="text-xl font-semibold text-gray-900">{service.title}</h3>
+                  <p className="mt-4 text-sm leading-relaxed text-gray-600">
                     {service.description}
                   </p>
-                  <ul className="mt-4 space-y-2 text-sm text-gray-500">
+                  <ul className="mt-5 space-y-2 text-sm text-gray-500">
                     {service.highlights.map((highlight) => (
                       <li key={highlight} className="flex items-center gap-2">
                         <span className="h-1.5 w-1.5 rounded-full bg-primary-600" />
@@ -84,7 +77,7 @@ export default function ServicesPage() {
                       </li>
                     ))}
                   </ul>
-                  <span className="mt-6 inline-flex text-sm font-medium text-primary-600">
+                  <span className="mt-auto inline-flex pt-6 text-sm font-medium text-primary-600">
                     詳細を見る →
                   </span>
                 </div>

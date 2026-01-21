@@ -23,10 +23,18 @@ const getClient = () => {
   return client;
 };
 
-const normalizeArtwork = (artwork: Artwork) => ({
-  ...artwork,
-  images: Array.isArray(artwork.images) ? artwork.images : [],
-});
+const normalizeArtwork = (artwork: Artwork) => {
+  const images = Array.isArray(artwork.images)
+    ? artwork.images
+    : artwork.images
+      ? [artwork.images as Artwork['images'][number]]
+      : [];
+
+  return {
+    ...artwork,
+    images,
+  };
+};
 
 export const getArtworks = async (limit = 100, offset = 0) => {
   try {

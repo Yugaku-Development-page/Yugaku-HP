@@ -32,29 +32,6 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen">
-      <header className="border-b border-slate-200 bg-white/90 backdrop-blur">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <div className="text-lg font-semibold tracking-wide font-brand">株式会社由岳</div>
-          <nav className="hidden gap-6 text-sm text-slate-600 md:flex">
-            <a className="hover:text-slate-900" href="#services">
-              事業内容
-            </a>
-            <a className="hover:text-slate-900" href="#gallery">
-              ギャラリー
-            </a>
-            <a className="hover:text-slate-900" href="#news">
-              ニュース
-            </a>
-            <a className="hover:text-slate-900" href="#company">
-              会社情報
-            </a>
-            <a className="hover:text-slate-900" href="#contact">
-              お問い合わせ
-            </a>
-          </nav>
-        </div>
-      </header>
-
       <main>
         <section className="bg-slate-900 py-20 text-white">
           <div className="mx-auto max-w-5xl px-6">
@@ -247,13 +224,6 @@ export default async function Home() {
           </div>
         </section>
       </main>
-
-      <footer className="border-t border-slate-200 py-8">
-        <div className="mx-auto flex max-w-5xl flex-col gap-2 px-6 text-xs text-slate-500 md:flex-row md:items-center md:justify-between">
-          <span>© 2026 Yugaku Inc.</span>
-          <span>作品の色味は実物と異なる場合があります。</span>
-        </div>
-      </footer>
     </div>
   );
 }

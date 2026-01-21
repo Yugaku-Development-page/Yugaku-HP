@@ -7,12 +7,6 @@ export const metadata: Metadata = {
 };
 
 export default function PrivacyPage() {
-  const currentDate = new Date().toLocaleDateString('ja-JP', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-
   return (
     <div className="bg-gray-50 min-h-screen">
       {/* ヒーローセクション */}
@@ -35,29 +29,35 @@ export default function PrivacyPage() {
           <div className="card">
             <div className="prose prose-lg max-w-none">
               <p className="text-gray-600 mb-8">
-                株式会社由岳（以下「当社」といいます。）は、当社が提供するウェブサイト（以下「本サイト」といいます。）における、利用者の個人情報等の取扱いについて、以下のとおり定めます。
+                株式会社由岳（以下「当社」といいます。）は、当社が運営するウェブサイト（以下「本サイト」といいます。）において取得する利用者の情報について、以下のとおりプライバシーポリシー（以下「本ポリシー」といいます。）を定めます。
               </p>
 
               <h2 className="text-xl font-bold text-gray-900 mt-8 mb-4">1. 取得する情報</h2>
               <p className="text-gray-600 mb-6">
-                当社は、本サイトにおいて、以下の情報を取得する場合があります。
+                当社は、本サイトの利用にあたり、以下の情報を取得する場合があります。
               </p>
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">利用者が入力する情報</h3>
               <ul className="text-gray-600 mb-6 space-y-2">
-                <li>・お問い合わせフォーム等に利用者が入力する情報（氏名、会社名、メールアドレス、電話番号、お問い合わせ内容等）</li>
-                <li>・本サイトの利用に伴い自動的に取得される情報（Cookie、アクセスログ、端末情報、ブラウザ情報等）</li>
+                <li>・氏名、会社名（屋号）、メールアドレス、電話番号、お問い合わせ内容、その他フォームに入力された情報</li>
+              </ul>
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">自動的に取得される情報</h3>
+              <ul className="text-gray-600 mb-6 space-y-2">
+                <li>・Cookie、アクセスログ、端末情報、ブラウザ情報、IPアドレス等</li>
+                <li>※取得の有無や範囲は、本サイトの構成や利用状況により異なります。</li>
               </ul>
 
               <h2 className="text-xl font-bold text-gray-900 mt-8 mb-4">2. 利用目的</h2>
               <p className="text-gray-600 mb-6">
                 当社は、取得した情報を以下の目的で利用します。
               </p>
-              <ol className="text-gray-600 mb-6 space-y-2">
-                <li>(1) お問い合わせへの回答、連絡、必要な手続のため</li>
-                <li>(2) サービスの提供、運営、改善のため</li>
-                <li>(3) 不正アクセス・不正利用の防止、セキュリティ確保のため</li>
-                <li>(4) 利用者の同意を得た目的のため</li>
-                <li>(5) 法令またはガイドライン等への対応のため</li>
-              </ol>
+              <ul className="text-gray-600 mb-6 space-y-2">
+                <li>・お問い合わせへの回答、連絡、必要な手続のため</li>
+                <li>・本サイトおよび当社サービスの提供・運営・改善のため</li>
+                <li>・不正アクセス、不正利用の防止、セキュリティ確保のため</li>
+                <li>・利用規約・ポリシー違反への対応、紛争対応のため</li>
+                <li>・法令またはガイドライン等への対応のため</li>
+                <li>・その他、上記利用目的に付随する目的のため</li>
+              </ul>
 
               <h2 className="text-xl font-bold text-gray-900 mt-8 mb-4">3. 第三者提供</h2>
               <p className="text-gray-600 mb-6">
@@ -67,12 +67,13 @@ export default function PrivacyPage() {
                 <li>・利用者の同意がある場合</li>
                 <li>・法令に基づく場合</li>
                 <li>・人の生命・身体・財産の保護のために必要で、本人の同意を得ることが困難な場合</li>
-                <li>・業務委託先に対して、利用目的の達成に必要な範囲で取り扱いを委託する場合</li>
+                <li>・公衆衛生の向上または児童の健全な育成の推進のために特に必要で、本人の同意を得ることが困難な場合</li>
+                <li>・国の機関等が法令の定める事務を遂行することに協力する必要があり、本人の同意を得ることで当該事務の遂行に支障を及ぼすおそれがある場合</li>
               </ul>
 
-              <h2 className="text-xl font-bold text-gray-900 mt-8 mb-4">4. 業務委託</h2>
+              <h2 className="text-xl font-bold text-gray-900 mt-8 mb-4">4. 委託</h2>
               <p className="text-gray-600 mb-6">
-                当社は、利用目的の達成に必要な範囲で、個人情報の取扱いを外部事業者に委託する場合があります。この場合、当社は委託先に対し、適切な監督を行います。
+                当社は、利用目的の達成に必要な範囲で、取得した情報の取扱いを外部事業者に委託する場合があります（例：ホスティング、CMS、フォーム、メール配信、アクセス解析等）。この場合、当社は委託先に対し適切な監督を行います。
               </p>
 
               <h2 className="text-xl font-bold text-gray-900 mt-8 mb-4">5. Cookie等の利用</h2>
@@ -107,7 +108,8 @@ export default function PrivacyPage() {
 
               <div className="mt-12 pt-8 border-t border-gray-200">
                 <p className="text-sm text-gray-500 text-center">
-                  制定日：{currentDate}
+                  制定日：2026年1月19日<br />
+                  株式会社由岳
                 </p>
               </div>
             </div>

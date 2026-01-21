@@ -3,7 +3,6 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import type { Artwork, Artist } from '@/types/microcms';
-import ListPageNav from '@/components/ListPageNav';
 
 interface FilterState {
   category: string;
@@ -53,14 +52,6 @@ export default function GalleryClient({ artworks, artists }: GalleryClientProps)
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
-          <Link href="/" className="text-sm font-semibold tracking-wide text-slate-900">
-            株式会社由岳
-          </Link>
-          <ListPageNav />
-        </div>
-      </header>
       <section className="bg-white">
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
