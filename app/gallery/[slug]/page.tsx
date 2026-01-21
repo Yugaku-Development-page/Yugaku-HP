@@ -37,21 +37,29 @@ export default async function ArtworkDetailPage({ params }: Props) {
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen">
-      <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
-        <div className="mx-auto max-w-4xl">
+    <div className="min-h-screen bg-slate-50">
+      <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-900 text-white">
+        <div className="pointer-events-none absolute inset-0 opacity-60">
+          <div className="absolute -left-16 top-10 h-64 w-64 rounded-full bg-indigo-500/30 blur-3xl" />
+          <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-sky-400/20 blur-3xl" />
+        </div>
+        <div className="relative mx-auto max-w-7xl px-6 py-16 lg:px-8">
           <Link
             href="/gallery"
-            className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 mb-8"
+            className="inline-flex items-center text-sm text-slate-200 hover:text-white"
           >
             <i className="fas fa-arrow-left mr-2"></i>
             ギャラリーに戻る
           </Link>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
+        <div className="mx-auto max-w-4xl">
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
             {/* 画像セクション */}
             <div>
-              <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg bg-gray-200">
+              <div className="aspect-[4/3] w-full overflow-hidden rounded-2xl border border-slate-200/80 bg-gray-200 shadow-sm">
                 {artwork.images[0]?.url ? (
                   <img
                     src={artwork.images[0].url}
@@ -65,9 +73,12 @@ export default async function ArtworkDetailPage({ params }: Props) {
                 )}
               </div>
               {artwork.images.length > 1 && (
-                <div className="mt-4 grid grid-cols-4 gap-2">
+                <div className="mt-4 grid grid-cols-4 gap-3">
                   {artwork.images.slice(1).map((image, index) => (
-                    <div key={index} className="aspect-w-1 aspect-h-1 overflow-hidden rounded-md bg-gray-200">
+                    <div
+                      key={index}
+                      className="aspect-square overflow-hidden rounded-lg border border-slate-200/80 bg-gray-200"
+                    >
                       <img
                         src={image.url}
                         alt={`${artwork.title} - 画像${index + 2}`}
@@ -82,46 +93,53 @@ export default async function ArtworkDetailPage({ params }: Props) {
             {/* 情報セクション */}
             <div>
               <div className="mb-6">
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">{artwork.title}</h1>
+                <h1 className="mb-2 text-3xl font-bold text-gray-900">{artwork.title}</h1>
                 <p className="text-lg text-gray-600">{artwork.artist.name}</p>
               </div>
 
-              <div className="space-y-4 mb-8">
-                <div className="flex justify-between items-center py-3 border-b border-gray-200">
+              <div className="mb-8 space-y-4 rounded-2xl border border-slate-200/70 bg-white/90 p-6 shadow-sm">
+                <div className="flex items-center justify-between border-b border-gray-200 py-3">
                   <span className="text-sm font-medium text-gray-500">カテゴリ</span>
                   <span className="text-sm text-gray-900">{artwork.category}</span>
                 </div>
                 {artwork.year && (
-                  <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                  <div className="flex items-center justify-between border-b border-gray-200 py-3">
                     <span className="text-sm font-medium text-gray-500">制作年</span>
                     <span className="text-sm text-gray-900">{artwork.year}</span>
                   </div>
                 )}
                 {artwork.material && (
-                  <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                  <div className="flex items-center justify-between border-b border-gray-200 py-3">
                     <span className="text-sm font-medium text-gray-500">素材</span>
                     <span className="text-sm text-gray-900">{artwork.material}</span>
                   </div>
                 )}
                 {artwork.size && (
-                  <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                  <div className="flex items-center justify-between border-b border-gray-200 py-3">
                     <span className="text-sm font-medium text-gray-500">サイズ</span>
                     <span className="text-sm text-gray-900">{artwork.size}</span>
                   </div>
                 )}
-                <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                <div className="flex items-center justify-between border-b border-gray-200 py-3">
                   <span className="text-sm font-medium text-gray-500">在庫状況</span>
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                    artwork.status === 'Available' ? 'bg-green-100 text-green-800' :
-                    artwork.status === 'Reserved' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-red-100 text-red-800'
-                  }`}>
-                    {artwork.status === 'Available' ? '販売中' :
-                     artwork.status === 'Reserved' ? '予約済み' : '売却済み'}
+                  <span
+                    className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                      artwork.status === 'Available'
+                        ? 'bg-green-100 text-green-800'
+                        : artwork.status === 'Reserved'
+                        ? 'bg-yellow-100 text-yellow-800'
+                        : 'bg-red-100 text-red-800'
+                    }`}
+                  >
+                    {artwork.status === 'Available'
+                      ? '販売中'
+                      : artwork.status === 'Reserved'
+                      ? '予約済み'
+                      : '売却済み'}
                   </span>
                 </div>
                 {artwork.price && (
-                  <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                  <div className="flex items-center justify-between border-b border-gray-200 py-3">
                     <span className="text-sm font-medium text-gray-500">価格</span>
                     <span className="text-lg font-semibold text-gray-900">{artwork.price}</span>
                   </div>
@@ -130,8 +148,8 @@ export default async function ArtworkDetailPage({ params }: Props) {
 
               <div className="mb-8">
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">キャプション</h3>
-                <div 
-                  className="text-gray-600 prose prose-sm max-w-none"
+                <div
+                  className="prose prose-sm max-w-none text-gray-600"
                   dangerouslySetInnerHTML={{ __html: artwork.description }}
                 />
               </div>
