@@ -1,15 +1,18 @@
 const services = [
   {
+    slug: "app-development",
     title: "アプリ開発・運用",
     description:
       "ビジネス課題の整理からUI/UX設計、開発・運用までを一気通貫で支援します。",
   },
   {
+    slug: "art-trading",
     title: "美術品取扱",
     description:
       "絵画・工芸・写真を中心に、作品の選定や展示・販売に関する提案を行います。",
   },
   {
+    slug: "sns-support",
     title: "SNS運用支援",
     description:
       "アートとデジタルの視点を活かし、ブランドの魅力が伝わる発信設計を支援します。",
@@ -31,7 +34,7 @@ export default async function Home() {
     <div className="min-h-screen">
       <header className="border-b border-slate-200 bg-white/90 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <div className="text-lg font-semibold tracking-wide">株式会社由岳</div>
+          <div className="text-lg font-semibold tracking-wide font-brand">株式会社由岳</div>
           <nav className="hidden gap-6 text-sm text-slate-600 md:flex">
             <a className="hover:text-slate-900" href="#services">
               事業内容
@@ -73,15 +76,19 @@ export default async function Home() {
             <h2 className="text-2xl font-semibold">事業内容</h2>
             <div className="mt-8 grid gap-6 md:grid-cols-3">
               {services.map((service) => (
-                <div
+                <Link
                   key={service.title}
-                  className="rounded-2xl border border-slate-200 p-6 shadow-sm"
+                  href={`/services/${service.slug}`}
+                  className="rounded-2xl border border-slate-200 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
                 >
                   <h3 className="text-lg font-semibold">{service.title}</h3>
                   <p className="mt-4 text-sm leading-relaxed text-slate-600">
                     {service.description}
                   </p>
-                </div>
+                  <span className="mt-6 inline-flex text-sm font-medium text-slate-700">
+                    詳細を見る →
+                  </span>
+                </Link>
               ))}
             </div>
           </div>
@@ -106,16 +113,39 @@ export default async function Home() {
                     className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md"
                   >
                     <div className="aspect-[4/3] overflow-hidden bg-slate-100">
-                      <img
-                        src={artwork.images[0]?.url}
-                        alt={artwork.title}
-                        className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
-                      />
+                      {artwork.images[0]?.url ? (
+                        <img
+                          src={artwork.images[0].url}
+                          alt={artwork.title}
+                          className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 text-slate-400">
+                          <i className="fas fa-image text-3xl"></i>
+                        </div>
+                      )}
                     </div>
                     <div className="p-4">
-                      <p className="text-sm font-semibold text-slate-800">
-                        {artwork.title}
-                      </p>
+                      <div className="flex items-start justify-between gap-2">
+                        <p className="text-sm font-semibold text-slate-800">
+                          {artwork.title}
+                        </p>
+                        <span
+                          className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${
+                            artwork.status === 'Available'
+                              ? 'bg-green-100 text-green-800'
+                              : artwork.status === 'Reserved'
+                              ? 'bg-yellow-100 text-yellow-800'
+                              : 'bg-red-100 text-red-800'
+                          }`}
+                        >
+                          {artwork.status === 'Available'
+                            ? '販売中'
+                            : artwork.status === 'Reserved'
+                            ? '予約済み'
+                            : '売却済み'}
+                        </span>
+                      </div>
                       <p className="mt-1 text-xs text-slate-500">
                         {artwork.artist.name}
                       </p>
@@ -208,9 +238,12 @@ export default async function Home() {
             <p className="mt-4 max-w-2xl text-sm text-slate-600">
               事業に関するご相談は、お問い合わせフォームよりご連絡ください。
             </p>
-            <div className="mt-6 inline-flex rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white">
-              /contact へ移動
-            </div>
+            <Link
+              href="/contact"
+              className="mt-6 inline-flex rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+            >
+              メールで問い合わせる
+            </Link>
           </div>
         </section>
       </main>

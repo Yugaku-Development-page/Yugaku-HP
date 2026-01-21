@@ -150,11 +150,17 @@ export default function GalleryClient({ artworks, artists }: GalleryClientProps)
               {filteredArtworks.map((artwork) => (
                 <div key={artwork.id} className="group relative">
                   <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
-                    <img
-                      src={artwork.images[0]?.url}
-                      alt={artwork.title}
-                      className="h-full w-full object-cover object-center lg:h-full lg:w-full"
-                    />
+                    {artwork.images[0]?.url ? (
+                      <img
+                        src={artwork.images[0].url}
+                        alt={artwork.title}
+                        className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 text-slate-400">
+                        <i className="fas fa-image text-4xl"></i>
+                      </div>
+                    )}
                   </div>
                   <div className="mt-4 flex justify-between">
                     <div>

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getArtwork } from '@/lib/microcms';
+import { getArtworkBySlug } from '@/lib/microcms';
 import type { Metadata } from 'next';
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const artwork = await getArtwork(params.slug);
+  const artwork = await getArtworkBySlug(params.slug);
   
   if (!artwork) {
     return {
@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ArtworkDetailPage({ params }: Props) {
-  const artwork = await getArtwork(params.slug);
+  const artwork = await getArtworkBySlug(params.slug);
 
   if (!artwork) {
     notFound();
@@ -52,11 +52,17 @@ export default async function ArtworkDetailPage({ params }: Props) {
             {/* 画像セクション */}
             <div>
               <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg bg-gray-200">
-                <img
-                  src={artwork.images[0]?.url}
-                  alt={artwork.title}
-                  className="h-full w-full object-cover object-center"
-                />
+                {artwork.images[0]?.url ? (
+                  <img
+                    src={artwork.images[0].url}
+                    alt={artwork.title}
+                    className="h-full w-full object-cover object-center"
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 text-slate-400">
+                    <i className="fas fa-image text-4xl"></i>
+                  </div>
+                )}
               </div>
               {artwork.images.length > 1 && (
                 <div className="mt-4 grid grid-cols-4 gap-2">
@@ -123,7 +129,7 @@ export default async function ArtworkDetailPage({ params }: Props) {
               </div>
 
               <div className="mb-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">作品について</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">キャプション</h3>
                 <div 
                   className="text-gray-600 prose prose-sm max-w-none"
                   dangerouslySetInnerHTML={{ __html: artwork.description }}

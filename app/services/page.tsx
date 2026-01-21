@@ -6,6 +6,24 @@ export const metadata: Metadata = {
   description: '株式会社由岳の事業内容について。アプリ制作、美術品取扱、SNS運用支援をご紹介します。',
 };
 
+const serviceCards = [
+  {
+    slug: 'app-development',
+    title: 'アプリ開発・運用',
+    description: '要件整理からUI/UX設計、開発・運用までを一気通貫で支援します。',
+  },
+  {
+    slug: 'art-trading',
+    title: '美術品取扱',
+    description: '絵画・工芸・写真を中心に、作品の選定や展示・販売に関する提案を行います。',
+  },
+  {
+    slug: 'sns-support',
+    title: 'SNS運用支援',
+    description: 'アートとデジタルの視点を活かし、ブランドの魅力が伝わる発信設計を支援します。',
+  },
+];
+
 export default function ServicesPage() {
   return (
     <div className="bg-gray-50">
@@ -19,6 +37,27 @@ export default function ServicesPage() {
             <p className="mt-6 text-lg leading-8 text-gray-600">
               アートとデジタルの両領域で、価値を創造します。
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 事業一覧 */}
+      <section className="section-padding">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="grid gap-6 md:grid-cols-3">
+            {serviceCards.map((service) => (
+              <Link
+                key={service.slug}
+                href={`/services/${service.slug}`}
+                className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+              >
+                <h3 className="text-lg font-semibold text-gray-900">{service.title}</h3>
+                <p className="mt-3 text-sm text-gray-600">{service.description}</p>
+                <span className="mt-6 inline-flex text-sm font-medium text-primary-600">
+                  詳細を見る →
+                </span>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
@@ -71,6 +110,12 @@ export default function ServicesPage() {
                 <div className="mt-8">
                   <Link href="/contact?type=app" className="btn-primary">
                     アプリ制作の相談をする
+                  </Link>
+                  <Link
+                    href="/services/app-development"
+                    className="ml-4 text-sm font-medium text-primary-600 hover:text-primary-700"
+                  >
+                    詳細を見る →
                   </Link>
                 </div>
               </div>
@@ -174,6 +219,12 @@ export default function ServicesPage() {
                   <Link href="/gallery" className="btn-primary">
                     ギャラリーを見る
                   </Link>
+                  <Link
+                    href="/services/art-trading"
+                    className="ml-4 text-sm font-medium text-primary-600 hover:text-primary-700"
+                  >
+                    詳細を見る →
+                  </Link>
                 </div>
               </div>
             </div>
@@ -200,6 +251,10 @@ export default function ServicesPage() {
             <div className="mt-8">
               <Link href="/contact?type=sns" className="text-primary-600 hover:text-primary-700 text-sm">
                 紹介のある場合はこちらから →
+              </Link>
+              <span className="mx-2 text-gray-400">/</span>
+              <Link href="/services/sns-support" className="text-primary-600 hover:text-primary-700 text-sm">
+                詳細を見る →
               </Link>
             </div>
           </div>

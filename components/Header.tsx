@@ -22,7 +22,7 @@ export default function Header() {
       <nav className="mx-auto max-w-7xl px-6 lg:px-8" aria-label="Top">
         <div className="flex w-full items-center justify-between border-b border-indigo-500 lg:border-none">
           <div className="flex items-center">
-            <Link href="/" className="text-2xl font-bold text-gray-900">
+            <Link href="/" className="text-2xl font-bold text-gray-900 font-brand">
               株式会社由岳
             </Link>
           </div>
