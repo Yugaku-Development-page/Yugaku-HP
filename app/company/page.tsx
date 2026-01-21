@@ -8,15 +8,19 @@ export const metadata: Metadata = {
 
 export default function CompanyPage() {
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="min-h-screen bg-slate-50">
       {/* ヒーローセクション */}
-      <section className="bg-white">
-        <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+      <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-900 text-white">
+        <div className="pointer-events-none absolute inset-0 opacity-60">
+          <div className="absolute -left-16 top-10 h-64 w-64 rounded-full bg-indigo-500/30 blur-3xl" />
+          <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-sky-400/20 blur-3xl" />
+        </div>
+        <div className="relative mx-auto max-w-7xl px-6 py-24 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+            <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
               会社情報
             </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
+            <p className="mt-6 text-lg leading-8 text-slate-200">
               株式会社由岳について
             </p>
           </div>
@@ -55,31 +59,31 @@ export default function CompanyPage() {
           <div className="mx-auto mt-16 max-w-4xl">
             <div className="card">
               <dl className="divide-y divide-gray-100">
-                <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <div className="px-4 py-8 sm:grid sm:grid-cols-3 sm:gap-6 sm:px-0">
                   <dt className="text-sm font-medium leading-6 text-gray-900">会社名</dt>
                   <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                     株式会社由岳（ゆがく）
                   </dd>
                 </div>
-                <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <div className="px-4 py-8 sm:grid sm:grid-cols-3 sm:gap-6 sm:px-0">
                   <dt className="text-sm font-medium leading-6 text-gray-900">設立</dt>
                   <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                     2025年3月
                   </dd>
                 </div>
-                <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <div className="px-4 py-8 sm:grid sm:grid-cols-3 sm:gap-6 sm:px-0">
                   <dt className="text-sm font-medium leading-6 text-gray-900">代表者</dt>
                   <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                     青山 遥（ビジネスネーム）
                   </dd>
                 </div>
-                <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <div className="px-4 py-8 sm:grid sm:grid-cols-3 sm:gap-6 sm:px-0">
                   <dt className="text-sm font-medium leading-6 text-gray-900">所在地</dt>
                   <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                     神奈川県横浜市
                   </dd>
                 </div>
-                <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <div className="px-4 py-8 sm:grid sm:grid-cols-3 sm:gap-6 sm:px-0">
                   <dt className="text-sm font-medium leading-6 text-gray-900">事業内容</dt>
                   <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                     <ul className="space-y-1">

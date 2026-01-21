@@ -23,18 +23,48 @@ const getClient = () => {
   return client;
 };
 
-const normalizeArtwork = (artwork: Artwork) => {
-  const images = Array.isArray(artwork.images)
-    ? artwork.images
-    : artwork.images
-      ? [artwork.images as Artwork['images'][number]]
-      : [];
+const normalizeArtworkStatus = (status?: Artwork['status'] | string) => {
+  if (!status) {
+    return 'Available' as Artwork['status'];
+  }
 
-  return {
-    ...artwork,
-    images,
-  };
+  const normalized = status.toString().trim().toLowerCase();
+
+  if (['available', '販売中', '販売', 'on sale', 'for sale'].includes(normalized)) {
+    return 'Available';
+  }
+
+  if (['reserved', '予約済み', '予約', 'hold', 'held'].includes(normalized)) {
+    return 'Reserved';
+  }
+
+  if (['sold', '売却済み', '売却', 'completed'].includes(normalized)) {
+    return 'SOLD';
+  }
+
+  return 'Available';
 };
+
+const normalizeArtworkImages = (artwork: Artwork) => {
+  const rawImages = (artwork as Artwork & { image?: Artwork['images'][number] }).images ??
+    (artwork as Artwork & { image?: Artwork['images'][number] }).image;
+
+  if (Array.isArray(rawImages)) {
+    return rawImages.filter((image) => Boolean(image?.url));
+  }
+
+  if (rawImages && typeof rawImages === 'object' && 'url' in rawImages) {
+    return [rawImages as Artwork['images'][number]];
+  }
+
+  return [];
+};
+
+const normalizeArtwork = (artwork: Artwork) => ({
+  ...artwork,
+  status: normalizeArtworkStatus(artwork.status),
+  images: normalizeArtworkImages(artwork),
+});
 
 export const getArtworks = async (limit = 100, offset = 0) => {
   try {
@@ -124,11 +154,24 @@ export const getNewsItem = async (slug: string) => {
     if (!cmsClient) {
       return null;
     }
+    try {
+      const response = await cmsClient.get({
+        endpoint: 'news',
+        contentId: slug,
+      });
+      return response as News;
+    } catch (error) {
+      console.warn('Fallback to slug query for news item:', error);
+    }
+
     const response = await cmsClient.get({
       endpoint: 'news',
-      contentId: slug,
+      queries: {
+        limit: 1,
+        filters: `slug[equals]${slug}`,
+      },
     });
-    return response as News;
+    return (response.contents as News[])[0] ?? null;
   } catch (error) {
     console.error('Error fetching news item:', error);
     return null;

@@ -23,9 +23,18 @@ export default function GalleryClient({ artworks, artists }: GalleryClientProps)
   });
 
   const categories = useMemo(
-    () => Array.from(new Set(artworks.map((artwork) => artwork.category))),
+    () =>
+      Array.from(new Set(artworks.map((artwork) => artwork.category)))
+        .filter(Boolean)
+        .sort((a, b) => a.localeCompare(b, 'ja')),
     [artworks],
   );
+
+  const statusLabels: Record<string, string> = {
+    Available: '販売中',
+    Reserved: '予約済み',
+    SOLD: '売却済み',
+  };
 
   const filteredArtworks = useMemo(() => {
     let filtered = artworks;
@@ -51,14 +60,18 @@ export default function GalleryClient({ artworks, artists }: GalleryClientProps)
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen">
-      <section className="bg-white">
-        <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+    <div className="min-h-screen bg-slate-50">
+      <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-900 text-white">
+        <div className="pointer-events-none absolute inset-0 opacity-60">
+          <div className="absolute -left-16 top-10 h-64 w-64 rounded-full bg-indigo-500/30 blur-3xl" />
+          <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-sky-400/20 blur-3xl" />
+        </div>
+        <div className="relative mx-auto max-w-7xl px-6 py-24 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+            <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
               ギャラリー
             </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
+            <p className="mt-6 text-lg leading-8 text-slate-200">
               取扱い作品のご紹介
             </p>
           </div>
@@ -67,8 +80,8 @@ export default function GalleryClient({ artworks, artists }: GalleryClientProps)
 
       <section className="section-padding">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="card">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="rounded-2xl border border-slate-200/80 bg-white/90 p-6 shadow-sm">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   カテゴリ
@@ -96,7 +109,7 @@ export default function GalleryClient({ artworks, artists }: GalleryClientProps)
                 <select
                   value={filters.artist}
                   onChange={(e) => setFilters((prev) => ({ ...prev, artist: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 >
                   <option value="">すべての作家</option>
                   {artists.map((artist) => (
@@ -110,8 +123,8 @@ export default function GalleryClient({ artworks, artists }: GalleryClientProps)
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   在庫状況
                 </label>
-                <div className="flex gap-2">
-                  {['Available', 'Reserved', 'SOLD'].map((status) => (
+                <div className="flex flex-wrap gap-2">
+                  {(['Available', 'Reserved', 'SOLD'] as const).map((status) => (
                     <button
                       key={status}
                       onClick={() => handleFilterChange('status', status)}
@@ -125,11 +138,7 @@ export default function GalleryClient({ artworks, artists }: GalleryClientProps)
                           : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                       }`}
                     >
-                      {status === 'Available'
-                        ? '販売中'
-                        : status === 'Reserved'
-                        ? '予約済み'
-                        : '売却済み'}
+                      {statusLabels[status]}
                     </button>
                   ))}
                 </div>
@@ -142,19 +151,23 @@ export default function GalleryClient({ artworks, artists }: GalleryClientProps)
       <section className="section-padding">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           {filteredArtworks.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">該当する作品が見つかりませんでした。</p>
+            <div className="py-12 text-center">
+              <p className="text-lg text-gray-500">該当する作品が見つかりませんでした。</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
               {filteredArtworks.map((artwork) => (
-                <div key={artwork.id} className="group relative">
-                  <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
+                <Link
+                  key={artwork.id}
+                  href={`/gallery/${artwork.slug}`}
+                  className="group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm transition hover:-translate-y-1 hover:border-slate-300 hover:shadow-md"
+                >
+                  <div className="aspect-[4/3] w-full overflow-hidden bg-slate-100">
                     {artwork.images[0]?.url ? (
                       <img
                         src={artwork.images[0].url}
                         alt={artwork.title}
-                        className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+                        className="h-full w-full object-cover object-center transition duration-300 group-hover:scale-105"
                       />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 text-slate-400">
@@ -162,20 +175,16 @@ export default function GalleryClient({ artworks, artists }: GalleryClientProps)
                       </div>
                     )}
                   </div>
-                  <div className="mt-4 flex justify-between">
-                    <div>
-                      <h3 className="text-sm text-gray-700">
-                        <Link href={`/gallery/${artwork.slug}`}>
-                          <span className="absolute inset-0" />
+                  <div className="space-y-3 p-5">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <h3 className="text-sm font-semibold text-slate-800">
                           {artwork.title}
-                        </Link>
-                      </h3>
-                      <p className="mt-1 text-sm text-gray-500">{artwork.artist.name}</p>
-                      <p className="mt-1 text-sm text-gray-500">{artwork.year}</p>
-                    </div>
-                    <div className="text-right">
+                        </h3>
+                        <p className="mt-1 text-sm text-slate-500">{artwork.artist.name}</p>
+                      </div>
                       <span
-                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                        className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
                           artwork.status === 'Available'
                             ? 'bg-green-100 text-green-800'
                             : artwork.status === 'Reserved'
@@ -183,20 +192,17 @@ export default function GalleryClient({ artworks, artists }: GalleryClientProps)
                             : 'bg-red-100 text-red-800'
                         }`}
                       >
-                        {artwork.status === 'Available'
-                          ? '販売中'
-                          : artwork.status === 'Reserved'
-                          ? '予約済み'
-                          : '売却済み'}
+                        {statusLabels[artwork.status]}
                       </span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm text-slate-500">
+                      <span>{artwork.year}</span>
                       {artwork.price && (
-                        <p className="mt-1 text-sm font-medium text-gray-900">
-                          {artwork.price}
-                        </p>
+                        <span className="font-medium text-slate-800">{artwork.price}</span>
                       )}
                     </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           )}

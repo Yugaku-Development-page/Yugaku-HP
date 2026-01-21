@@ -33,8 +33,12 @@ export default async function Home() {
   return (
     <div className="min-h-screen">
       <main>
-        <section className="bg-slate-900 py-20 text-white">
-          <div className="mx-auto max-w-5xl px-6">
+        <section className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 py-24 text-white">
+          <div className="pointer-events-none absolute inset-0 opacity-70">
+            <div className="absolute -left-20 top-10 h-72 w-72 rounded-full bg-indigo-500/30 blur-3xl" />
+            <div className="absolute bottom-0 right-0 h-80 w-80 rounded-full bg-sky-400/20 blur-3xl" />
+          </div>
+          <div className="relative mx-auto max-w-5xl px-6">
             <p className="text-sm uppercase tracking-[0.3em] text-slate-300">
               Art &amp; Digital
             </p>
@@ -48,15 +52,18 @@ export default async function Home() {
           </div>
         </section>
 
-        <section id="services" className="py-16">
+        <section id="services" className="py-20">
           <div className="mx-auto max-w-5xl px-6">
-            <h2 className="text-2xl font-semibold">事業内容</h2>
-            <div className="mt-8 grid gap-6 md:grid-cols-3">
+            <h2 className="text-2xl font-semibold text-slate-900">事業内容</h2>
+            <p className="mt-3 max-w-2xl text-sm text-slate-600">
+              企画から実装まで、アートとデジタルの両輪で伴走します。
+            </p>
+            <div className="mt-10 grid gap-6 md:grid-cols-3">
               {services.map((service) => (
                 <Link
                   key={service.title}
                   href={`/services/${service.slug}`}
-                  className="rounded-2xl border border-slate-200 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+                  className="rounded-2xl border border-slate-200/80 bg-gradient-to-br from-white via-white to-slate-50/80 p-6 shadow-sm transition hover:-translate-y-1 hover:border-slate-300 hover:shadow-md"
                 >
                   <h3 className="text-lg font-semibold">{service.title}</h3>
                   <p className="mt-4 text-sm leading-relaxed text-slate-600">
@@ -71,23 +78,20 @@ export default async function Home() {
           </div>
         </section>
 
-        <section id="gallery" className="bg-slate-50 py-16">
+        <section id="gallery" className="bg-gradient-to-b from-slate-50 via-white to-slate-100 py-20">
           <div className="mx-auto max-w-5xl px-6">
-            <h2 className="text-2xl font-semibold">ギャラリー</h2>
-            <p className="mt-4 max-w-2xl text-sm text-slate-600">
-              microCMSの最新作品を掲載しています。
-            </p>
+            <h2 className="text-2xl font-semibold text-slate-900">ギャラリー</h2>
             {artworks.length === 0 ? (
               <p className="mt-6 text-sm text-slate-500">
                 現在公開中の作品はありません。
               </p>
             ) : (
-              <div className="mt-8 grid gap-6 md:grid-cols-3">
+              <div className="mt-10 grid gap-6 md:grid-cols-3">
                 {artworks.map((artwork) => (
                   <Link
                     key={artwork.id}
                     href={`/gallery/${artwork.slug}`}
-                    className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md"
+                    className="group overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm transition hover:-translate-y-1 hover:border-slate-300 hover:shadow-md"
                   >
                     <div className="aspect-[4/3] overflow-hidden bg-slate-100">
                       {artwork.images[0]?.url ? (
@@ -142,15 +146,15 @@ export default async function Home() {
           </div>
         </section>
 
-        <section id="news" className="py-16">
+        <section id="news" className="py-20">
           <div className="mx-auto max-w-5xl px-6">
-            <h2 className="text-2xl font-semibold">ニュース</h2>
+            <h2 className="text-2xl font-semibold text-slate-900">ニュース</h2>
             {newsItems.length === 0 ? (
               <p className="mt-6 text-sm text-slate-500">
                 現在公開中のお知らせはありません。
               </p>
             ) : (
-              <ul className="mt-6 divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white">
+              <ul className="mt-8 divide-y divide-slate-200 rounded-2xl border border-slate-200/80 bg-gradient-to-br from-white via-white to-slate-50/80 shadow-sm">
                 {newsItems.map((item) => (
                   <li
                     key={item.id}
@@ -169,7 +173,7 @@ export default async function Home() {
                       </span>
                     </div>
                     <Link
-                      href={`/news/${item.slug}`}
+                      href={`/news/${item.slug ?? item.id}`}
                       className="text-sm font-medium text-slate-700 hover:text-slate-900"
                     >
                       詳細 →
@@ -189,19 +193,19 @@ export default async function Home() {
           </div>
         </section>
 
-        <section id="company" className="bg-slate-50 py-16">
+        <section id="company" className="bg-slate-50 py-20">
           <div className="mx-auto max-w-5xl px-6">
-            <h2 className="text-2xl font-semibold">会社情報</h2>
-            <div className="mt-6 grid gap-4 text-sm text-slate-700">
-              <div className="flex flex-col gap-1 border-b border-slate-200 pb-4 md:flex-row md:gap-6">
+            <h2 className="text-2xl font-semibold text-slate-900">会社情報</h2>
+            <div className="mt-8 grid gap-6 rounded-2xl border border-slate-200/70 bg-white/80 px-6 py-8 text-sm text-slate-700 shadow-sm">
+              <div className="flex flex-col gap-2 border-b border-slate-200/70 pb-5 md:flex-row md:gap-10">
                 <span className="w-28 font-medium">社名</span>
                 <span>株式会社由岳</span>
               </div>
-              <div className="flex flex-col gap-1 border-b border-slate-200 pb-4 md:flex-row md:gap-6">
+              <div className="flex flex-col gap-2 border-b border-slate-200/70 pb-5 md:flex-row md:gap-10">
                 <span className="w-28 font-medium">事業内容</span>
                 <span>アプリ制作 / 美術品取扱 / SNS運用支援</span>
               </div>
-              <div className="flex flex-col gap-1 md:flex-row md:gap-6">
+              <div className="flex flex-col gap-2 md:flex-row md:gap-10">
                 <span className="w-28 font-medium">所在地</span>
                 <span>神奈川県横浜市（詳細はお問い合わせください）</span>
               </div>
@@ -209,15 +213,15 @@ export default async function Home() {
           </div>
         </section>
 
-        <section id="contact" className="py-16">
+        <section id="contact" className="py-20">
           <div className="mx-auto max-w-5xl px-6">
-            <h2 className="text-2xl font-semibold">お問い合わせ</h2>
+            <h2 className="text-2xl font-semibold text-slate-900">お問い合わせ</h2>
             <p className="mt-4 max-w-2xl text-sm text-slate-600">
               事業に関するご相談は、お問い合わせフォームよりご連絡ください。
             </p>
             <Link
               href="/contact"
-              className="mt-6 inline-flex rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+              className="mt-6 inline-flex rounded-full bg-gradient-to-r from-slate-900 to-indigo-700 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:from-slate-800 hover:to-indigo-600"
             >
               メールで問い合わせる
             </Link>
