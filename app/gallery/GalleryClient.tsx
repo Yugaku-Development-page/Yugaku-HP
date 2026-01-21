@@ -23,7 +23,7 @@ export default function GalleryClient({ artworks, artists }: GalleryClientProps)
   });
 
   const categories = useMemo(
-    () => [...new Set(artworks.map((artwork) => artwork.category))],
+    () => Array.from(new Set(artworks.map((artwork) => artwork.category))),
     [artworks],
   );
 
