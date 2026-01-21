@@ -23,6 +23,11 @@ const getClient = () => {
   return client;
 };
 
+const normalizeArtwork = (artwork: Artwork) => ({
+  ...artwork,
+  images: Array.isArray(artwork.images) ? artwork.images : [],
+});
+
 export const getArtworks = async (limit = 100, offset = 0) => {
   try {
     const cmsClient = getClient();
@@ -37,14 +42,14 @@ export const getArtworks = async (limit = 100, offset = 0) => {
         orders: '-createdAt',
       },
     });
-    return response.contents as Artwork[];
+    return (response.contents as Artwork[]).map(normalizeArtwork);
   } catch (error) {
     console.error('Error fetching artworks:', error);
     return [];
   }
 };
 
-export const getArtwork = async (slug: string) => {
+export const getArtworkBySlug = async (slug: string) => {
   try {
     const cmsClient = getClient();
     if (!cmsClient) {
@@ -52,9 +57,13 @@ export const getArtwork = async (slug: string) => {
     }
     const response = await cmsClient.get({
       endpoint: 'artworks',
-      contentId: slug,
+      queries: {
+        limit: 1,
+        filters: `slug[equals]${slug}`,
+      },
     });
-    return response as Artwork;
+    const artwork = (response.contents as Artwork[])[0];
+    return artwork ? normalizeArtwork(artwork) : null;
   } catch (error) {
     console.error('Error fetching artwork:', error);
     return null;

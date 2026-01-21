@@ -1,65 +1,44 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import { sendContactForm } from '@/lib/contact';
-import type { ContactForm } from '@/types/microcms';
+
+const typeLabels: Record<string, string> = {
+  app: 'アプリ制作の相談',
+  artwork: '美術品（購入・委託・紹介）の相談',
+  sns: 'SNS運用支援（紹介制）',
+  other: 'その他',
+};
 
 export default function ContactPage() {
   const searchParams = useSearchParams();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitResult, setSubmitResult] = useState<{ success: boolean; message?: string } | null>(null);
-  
-  const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<ContactForm>();
+  const [name, setName] = useState('');
+  const [role, setRole] = useState('');
+  const [message, setMessage] = useState('');
 
-  useEffect(() => {
-    const type = searchParams.get('type');
-    const artworkTitle = searchParams.get('artworkTitle');
-    const artworkId = searchParams.get('artworkId');
+  const type = searchParams.get('type') ?? 'other';
+  const artworkTitle = searchParams.get('artworkTitle');
+  const artworkId = searchParams.get('artworkId');
+  const typeLabel = typeLabels[type] ?? typeLabels.other;
 
-    if (type) {
-      const contactTypes = ['app', 'artwork', 'other', 'sns'] as const;
-      const isContactType = (value: string): value is ContactForm['type'] =>
-        contactTypes.includes(value as ContactForm['type']);
-      setValue('type', isContactType(type) ? type : 'other');
-    }
+  const mailtoLink = useMemo(() => {
+    const subject = `お問い合わせ：${typeLabel}`;
+    const bodyLines = [
+      `お名前: ${name || '未入力'}`,
+      `役職: ${role || '未入力'}`,
+      `お問い合わせ種別: ${typeLabel}`,
+      artworkTitle ? `作品名: ${decodeURIComponent(artworkTitle)}` : null,
+      artworkId ? `作品ID: ${artworkId}` : null,
+      '',
+      'お問い合わせ内容:',
+      message || '未入力',
+    ].filter(Boolean);
 
-    if (artworkTitle) {
-      setValue('artworkTitle', decodeURIComponent(artworkTitle));
-    }
-    if (artworkId) {
-      setValue('artworkId', artworkId);
-    }
-  }, [searchParams, setValue]);
-
-  const onSubmit = async (data: ContactForm) => {
-    setIsSubmitting(true);
-    const result = await sendContactForm(data);
-    setSubmitResult(result);
-    setIsSubmitting(false);
-
-    if (result.success) {
-      reset();
-    }
-  };
-
-  const getTypeLabel = (type: string) => {
-    switch (type) {
-      case 'app':
-        return 'アプリ制作の相談';
-      case 'artwork':
-        return '美術品（購入・委託・紹介）の相談';
-      case 'sns':
-        return 'SNS運用支援（紹介制）';
-      default:
-        return 'その他';
-    }
-  };
+    return `mailto:kurodasc@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join('\n'))}`;
+  }, [name, role, message, typeLabel, artworkTitle, artworkId]);
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      {/* ヒーローセクション */}
       <section className="bg-white">
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
@@ -67,204 +46,84 @@ export default function ContactPage() {
               お問い合わせ
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-600">
-              ご相談・お問い合わせはお気軽に
+              フォーム入力後、メールアプリが起動します。
             </p>
           </div>
         </div>
       </section>
 
-      {/* フォームセクション */}
       <section className="section-padding">
         <div className="mx-auto max-w-3xl px-6 lg:px-8">
           <div className="card">
-            {submitResult && (
-              <div className={`mb-6 p-4 rounded-lg ${
-                submitResult.success
-                  ? 'bg-green-50 border border-green-200 text-green-800'
-                  : 'bg-red-50 border border-red-200 text-red-800'
-              }`}>
-                <p className="font-medium">
-                  {submitResult.success
-                    ? 'お問い合わせを受け付けました'
-                    : 'エラーが発生しました'}
-                </p>
-                <p className="text-sm mt-1">
-                  {submitResult.success
-                    ? '内容確認のうえ、通常2営業日以内にご連絡します。'
-                    : submitResult.message}
-                </p>
-              </div>
-            )}
-
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-              {/* 問い合わせ種別 */}
+            <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800">
+              宛先：kurodasc@gmail.com
+            </div>
+            <div className="space-y-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  お問い合わせ種別 <span className="text-red-500">*</span>
+                  お問い合わせ種別
                 </label>
-                <div className="space-y-2">
-                  {[
-                    { value: 'app', label: 'アプリ制作の相談' },
-                    { value: 'artwork', label: '美術品（購入・委託・紹介）の相談' },
-                    { value: 'other', label: 'その他' },
-                    { value: 'sns', label: 'SNS運用支援（紹介制）' },
-                  ].map((option) => (
-                    <label key={option.value} className="flex items-center">
-                      <input
-                        type="radio"
-                        value={option.value}
-                        {...register('type', { required: 'お問い合わせ種別を選択してください' })}
-                        className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300"
-                      />
-                      <span className="ml-2 text-sm text-gray-700">
-                        {option.label}
-                        {option.value === 'sns' && (
-                          <span className="ml-1 text-xs text-gray-500">
-                            （紹介のある場合のみ対応）
-                          </span>
-                        )}
-                      </span>
-                    </label>
-                  ))}
+                <div className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-700">
+                  {typeLabel}
                 </div>
-                {errors.type && (
-                  <p className="mt-1 text-sm text-red-600">{errors.type.message}</p>
-                )}
               </div>
 
-              {/* お名前 */}
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                  お名前
+                  お客様のお名前 <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   id="name"
-                  {...register('name')}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  required
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   placeholder="山田 太郎"
                 />
               </div>
 
-              {/* 会社名 */}
               <div>
-                <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-2">
-                  会社名
+                <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-2">
+                  役職 <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
-                  id="company"
-                  {...register('company')}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                  placeholder="株式会社○○"
+                  id="role"
+                  required
+                  value={role}
+                  onChange={(event) => setRole(event.target.value)}
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  placeholder="代表取締役 / 担当者など"
                 />
               </div>
 
-              {/* メールアドレス */}
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                  メールアドレス <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  {...register('email', {
-                    required: 'メールアドレスを入力してください',
-                    pattern: {
-                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                      message: '有効なメールアドレスを入力してください',
-                    },
-                  })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                  placeholder="your@email.com"
-                />
-                {errors.email && (
-                  <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
-                )}
-              </div>
-
-              {/* 電話番号 */}
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                  電話番号
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  {...register('phone')}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                  placeholder="03-1234-5678"
-                />
-              </div>
-
-              {/* 内容 */}
-              <div>
-                <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
                   お問い合わせ内容 <span className="text-red-500">*</span>
                 </label>
                 <textarea
-                  id="content"
+                  id="message"
                   rows={6}
-                  {...register('content', {
-                    required: 'お問い合わせ内容を入力してください',
-                    minLength: {
-                      value: 10,
-                      message: '10文字以上で入力してください',
-                    },
-                  })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  required
+                  value={message}
+                  onChange={(event) => setMessage(event.target.value)}
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   placeholder="お問い合わせ内容をご記入ください"
                 />
-                {errors.content && (
-                  <p className="mt-1 text-sm text-red-600">{errors.content.message}</p>
-                )}
               </div>
 
-              {/* 隠しフィールド */}
-              <input type="hidden" {...register('artworkTitle')} />
-              <input type="hidden" {...register('artworkId')} />
+              <a
+                href={mailtoLink}
+                className="inline-flex w-full justify-center rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+              >
+                メールを作成する
+              </a>
 
-              {/* 注意事項 */}
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <p className="text-blue-800 text-sm">
-                  <i className="fas fa-info-circle mr-2"></i>
-                  内容確認のうえ、通常2営業日以内にご連絡します。
-                </p>
-              </div>
-
-              {/* 送信ボタン */}
-              <div>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className={`w-full btn-primary ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
-                >
-                  {isSubmitting ? (
-                    <>
-                      <i className="fas fa-spinner fa-spin mr-2"></i>
-                      送信中...
-                    </>
-                  ) : (
-                    '送信する'
-                  )}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </section>
-
-      {/* お問い合わせ先 */}
-      <section className="section-padding bg-white">
-        <div className="mx-auto max-w-3xl px-6 lg:px-8">
-          <div className="card text-center">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">お急ぎの場合</h3>
-            <p className="text-gray-600 mb-4">
-              お電話でのお問い合わせも受け付けております。
-            </p>
-            <p className="text-sm text-gray-500">
-              ※営業時間：平日 9:00-18:00
-            </p>
+              <p className="text-xs text-gray-500">
+                ※「メールを作成する」を押すと、お使いのメールアプリが起動します。
+              </p>
+            </div>
           </div>
         </div>
       </section>
