@@ -1,14 +1,35 @@
 import { createClient } from 'microcms-js-sdk';
 import type { Artwork, Artist, News } from '@/types/microcms';
 
-const client = createClient({
-  serviceDomain: process.env.NEXT_PUBLIC_MICROCMS_SERVICE_DOMAIN || '',
-  apiKey: process.env.NEXT_PUBLIC_MICROCMS_API_KEY || '',
-});
+const serviceDomain =
+  process.env.MICROCMS_SERVICE_DOMAIN ||
+  process.env.NEXT_PUBLIC_MICROCMS_SERVICE_DOMAIN ||
+  '';
+const apiKey =
+  process.env.MICROCMS_API_KEY || process.env.NEXT_PUBLIC_MICROCMS_API_KEY || '';
+
+const client = serviceDomain && apiKey
+  ? createClient({
+      serviceDomain,
+      apiKey,
+    })
+  : null;
+
+const getClient = () => {
+  if (!client) {
+    console.warn('microCMS client is not configured. Check environment variables.');
+    return null;
+  }
+  return client;
+};
 
 export const getArtworks = async (limit = 100, offset = 0) => {
   try {
-    const response = await client.get({
+    const cmsClient = getClient();
+    if (!cmsClient) {
+      return [];
+    }
+    const response = await cmsClient.get({
       endpoint: 'artworks',
       queries: {
         limit,
@@ -25,7 +46,11 @@ export const getArtworks = async (limit = 100, offset = 0) => {
 
 export const getArtwork = async (slug: string) => {
   try {
-    const response = await client.get({
+    const cmsClient = getClient();
+    if (!cmsClient) {
+      return null;
+    }
+    const response = await cmsClient.get({
       endpoint: 'artworks',
       contentId: slug,
     });
@@ -38,7 +63,11 @@ export const getArtwork = async (slug: string) => {
 
 export const getArtists = async () => {
   try {
-    const response = await client.get({
+    const cmsClient = getClient();
+    if (!cmsClient) {
+      return [];
+    }
+    const response = await cmsClient.get({
       endpoint: 'artists',
       queries: {
         limit: 100,
@@ -53,7 +82,11 @@ export const getArtists = async () => {
 
 export const getNews = async (limit = 10, offset = 0) => {
   try {
-    const response = await client.get({
+    const cmsClient = getClient();
+    if (!cmsClient) {
+      return [];
+    }
+    const response = await cmsClient.get({
       endpoint: 'news',
       queries: {
         limit,
@@ -70,7 +103,11 @@ export const getNews = async (limit = 10, offset = 0) => {
 
 export const getNewsItem = async (slug: string) => {
   try {
-    const response = await client.get({
+    const cmsClient = getClient();
+    if (!cmsClient) {
+      return null;
+    }
+    const response = await cmsClient.get({
       endpoint: 'news',
       contentId: slug,
     });
