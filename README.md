@@ -55,8 +55,11 @@
 `.env.local`ファイルを作成し、以下の環境変数を設定してください：
 
 ```env
-NEXT_PUBLIC_MICROCMS_SERVICE_DOMAIN=your-service-domain
-NEXT_PUBLIC_MICROCMS_API_KEY=your-api-key
+MICROCMS_SERVICE_DOMAIN=your-service-domain
+MICROCMS_API_KEY=your-api-key
+MICROCMS_ENDPOINT_NEWS=news
+MICROCMS_ENDPOINT_ARTISTS=artists
+MICROCMS_ENDPOINT_ARTWORKS=artworks
 NEXT_PUBLIC_FORMSPREE_ENDPOINT=your-formspree-endpoint
 ```
 
@@ -100,29 +103,25 @@ colors: {
 
 #### Artworks
 - title (テキストフィールド)
-- slug (テキストフィールド、一意)
+- slug (テキストフィールド)
 - images (画像フィールド、複数)
 - artist (参照、Artists)
-- category (テキストフィールド)
-- year (テキストフィールド、任意)
-- material (テキストフィールド、任意)
-- size (テキストフィールド、任意)
-- price (テキストフィールド、任意)
-- status (テキストフィールド、Available/Reserved/SOLD)
+- category (セレクト、絵画/工芸/写真)
+- status (セレクト、Available/Reserved/SOLD)
 - description (リッチエディタ)
+- price (数値フィールド)
 
 #### Artists
 - name (テキストフィールド)
-- slug (テキストフィールド、一意)
+- slug (テキストフィールド)
 - profile (リッチエディタ)
-- image (画像フィールド、任意)
+- image (画像フィールド)
 
 #### News
 - title (テキストフィールド)
-- slug (テキストフィールド、一意)
+- slug (テキストフィールド)
 - date (日付フィールド)
 - body (リッチエディタ)
-- cover (画像フィールド、任意)
 
 ## 注意事項
 
