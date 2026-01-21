@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import ListPageNav from '@/components/ListPageNav';
 
 export const metadata: Metadata = {
   title: '事業内容',
@@ -11,25 +12,39 @@ const serviceCards = [
     slug: 'app-development',
     title: 'アプリ開発・運用',
     description: '要件整理からUI/UX設計、開発・運用までを一気通貫で支援します。',
+    highlights: ['課題ヒアリング', 'プロトタイピング', '運用改善'],
+    image: '/images/services/app-development.jpg',
   },
   {
     slug: 'art-trading',
     title: '美術品取扱',
     description: '絵画・工芸・写真を中心に、作品の選定や展示・販売に関する提案を行います。',
+    highlights: ['作品選定', '展示・販売支援', '委託相談'],
+    image: '/images/services/art-trading.jpg',
   },
   {
     slug: 'sns-support',
     title: 'SNS運用支援',
     description: 'アートとデジタルの視点を活かし、ブランドの魅力が伝わる発信設計を支援します。',
+    highlights: ['発信設計', 'ブランド整理', '紹介制対応'],
+    image: '/images/services/sns-support.jpg',
   },
 ];
 
 export default function ServicesPage() {
   return (
-    <div className="bg-gray-50">
+    <div className="bg-gray-50 min-h-screen">
+      <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
+          <Link href="/" className="text-sm font-semibold tracking-wide text-slate-900">
+            株式会社由岳
+          </Link>
+          <ListPageNav />
+        </div>
+      </header>
       {/* ヒーローセクション */}
-      <section className="bg-white">
-        <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+      <section className="bg-gradient-to-br from-white via-white to-slate-100">
+        <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
               事業内容
@@ -44,18 +59,35 @@ export default function ServicesPage() {
       {/* 事業一覧 */}
       <section className="section-padding">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid gap-8 md:grid-cols-3">
             {serviceCards.map((service) => (
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}`}
-                className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+                className="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
               >
-                <h3 className="text-lg font-semibold text-gray-900">{service.title}</h3>
-                <p className="mt-3 text-sm text-gray-600">{service.description}</p>
-                <span className="mt-6 inline-flex text-sm font-medium text-primary-600">
-                  詳細を見る →
-                </span>
+                <div
+                  className="aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-slate-100 via-white to-slate-200"
+                  style={{ backgroundImage: `url(${service.image})`, backgroundSize: 'cover' }}
+                  aria-label={`${service.title}のイメージ`}
+                />
+                <div className="p-6">
+                  <h3 className="text-lg font-semibold text-gray-900">{service.title}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-gray-600">
+                    {service.description}
+                  </p>
+                  <ul className="mt-4 space-y-2 text-sm text-gray-500">
+                    {service.highlights.map((highlight) => (
+                      <li key={highlight} className="flex items-center gap-2">
+                        <span className="h-1.5 w-1.5 rounded-full bg-primary-600" />
+                        {highlight}
+                      </li>
+                    ))}
+                  </ul>
+                  <span className="mt-6 inline-flex text-sm font-medium text-primary-600">
+                    詳細を見る →
+                  </span>
+                </div>
               </Link>
             ))}
           </div>
