@@ -1,257 +1,158 @@
-import Link from 'next/link';
-import { getArtworks, getNews } from '@/lib/microcms';
-import type { Metadata } from 'next';
+const services = [
+  {
+    title: "アプリ開発・運用",
+    description:
+      "ビジネス課題の整理からUI/UX設計、開発・運用までを一気通貫で支援します。",
+  },
+  {
+    title: "美術品取扱",
+    description:
+      "絵画・工芸・写真を中心に、作品の選定や展示・販売に関する提案を行います。",
+  },
+  {
+    title: "SNS運用支援",
+    description:
+      "アートとデジタルの視点を活かし、ブランドの魅力が伝わる発信設計を支援します。",
+  },
+];
 
-export const metadata: Metadata = {
-  title: '株式会社由岳 - アートとデジタルで、価値を編集する',
-  description: '株式会社由岳は、アプリの企画・開発と、美術品の取扱いを通じて、個人と企業の価値創造を支援します。',
-};
+const newsItems = [
+  {
+    title: "コーポレートサイトを公開しました",
+    date: "2026.01.19",
+  },
+  {
+    title: "ギャラリー展示の準備を進めています",
+    date: "2026.01.10",
+  },
+];
 
-export default async function Home() {
-  const artworks = await getArtworks(4);
-  const news = await getNews(3);
-
+export default function Home() {
   return (
-    <div className="bg-gray-50">
-      {/* ヒーローセクション */}
-      <section className="relative bg-gradient-to-br from-secondary-900 to-secondary-700 text-white">
-        <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
-          <div className="mx-auto max-w-3xl text-center">
-            <h1 className="text-4xl font-bold tracking-tight sm:text-6xl text-balance">
-              アートとデジタルで、価値を編集する。
+    <div className="min-h-screen">
+      <header className="border-b border-slate-200 bg-white/90 backdrop-blur">
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+          <div className="text-lg font-semibold tracking-wide">株式会社由岳</div>
+          <nav className="hidden gap-6 text-sm text-slate-600 md:flex">
+            <a className="hover:text-slate-900" href="#services">
+              事業内容
+            </a>
+            <a className="hover:text-slate-900" href="#gallery">
+              ギャラリー
+            </a>
+            <a className="hover:text-slate-900" href="#news">
+              ニュース
+            </a>
+            <a className="hover:text-slate-900" href="#company">
+              会社情報
+            </a>
+            <a className="hover:text-slate-900" href="#contact">
+              お問い合わせ
+            </a>
+          </nav>
+        </div>
+      </header>
+
+      <main>
+        <section className="bg-slate-900 py-20 text-white">
+          <div className="mx-auto max-w-5xl px-6">
+            <p className="text-sm uppercase tracking-[0.3em] text-slate-300">
+              Art &amp; Digital
+            </p>
+            <h1 className="mt-4 text-4xl font-semibold leading-tight md:text-5xl">
+              アートとデジタルで、価値を編集する
             </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-300 text-balance">
-              株式会社由岳は、アプリの企画・開発と、美術品の取扱いを通じて、個人と企業の価値創造を支援します。
+            <p className="mt-6 max-w-2xl text-base text-slate-200 md:text-lg">
+              株式会社由岳は、アプリの企画・開発と、美術品の取扱いを通じて、
+              個人と企業の価値創造を支援します。
             </p>
-            <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/contact?type=app" className="btn-primary">
-                アプリ制作の相談
-              </Link>
-              <Link href="/contact?type=artwork" className="btn-secondary">
-                作品・委託の相談
-              </Link>
-            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* 事業セクション */}
-      <section className="section-padding">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              私たちの事業
-            </h2>
-            <p className="mt-4 text-lg text-gray-600">
-              デジタルとアートの両領域で、価値を創造します。
-            </p>
-          </div>
-          <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-            {/* アプリ制作 */}
-            <div className="card">
-              <div className="flex items-center gap-x-4">
-                <div className="h-12 w-12 rounded-lg bg-primary-100 flex items-center justify-center">
-                  <i className="fas fa-mobile-alt text-primary-600 text-xl"></i>
+        <section id="services" className="py-16">
+          <div className="mx-auto max-w-5xl px-6">
+            <h2 className="text-2xl font-semibold">事業内容</h2>
+            <div className="mt-8 grid gap-6 md:grid-cols-3">
+              {services.map((service) => (
+                <div
+                  key={service.title}
+                  className="rounded-2xl border border-slate-200 p-6 shadow-sm"
+                >
+                  <h3 className="text-lg font-semibold">{service.title}</h3>
+                  <p className="mt-4 text-sm leading-relaxed text-slate-600">
+                    {service.description}
+                  </p>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900">アプリ制作（企画・開発）</h3>
-              </div>
-              <p className="mt-6 text-gray-600">
-                要件整理から設計・開発まで。小さく作って、速く改善する開発を得意としています。
-              </p>
-              <div className="mt-6">
-                <Link href="/services#app-development" className="text-primary-600 hover:text-primary-700 font-medium">
-                  詳しく見る →
-                </Link>
-              </div>
-            </div>
-
-            {/* 美術品取扱 */}
-            <div className="card">
-              <div className="flex items-center gap-x-4">
-                <div className="h-12 w-12 rounded-lg bg-primary-100 flex items-center justify-center">
-                  <i className="fas fa-palette text-primary-600 text-xl"></i>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900">美術品取扱</h3>
-              </div>
-              <p className="mt-6 text-gray-600">
-                伝統工芸から現代アートまで。作品の紹介・販売・委託相談に対応します。
-              </p>
-              <div className="mt-6">
-                <Link href="/gallery" className="text-primary-600 hover:text-primary-700 font-medium">
-                  ギャラリーを見る →
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* SNS運用支援（控えめ） */}
-          <div className="mt-12 text-center">
-            <p className="text-gray-600">
-              <span className="font-medium">SNS運用支援（紹介制）</span>
-              <br />
-              一部クローズド案件を中心に対応しています。詳細は紹介のある場合のみご案内します。
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ギャラリーセクション */}
-      {artworks.length > 0 && (
-        <section className="section-padding bg-white">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                ギャラリー
-              </h2>
-              <p className="mt-4 text-lg text-gray-600">
-                取扱い作品の一部をご紹介します。
-              </p>
-            </div>
-            <div className="mx-auto mt-16 grid max-w-2xl auto-rows-fr grid-cols-1 gap-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-4">
-              {artworks.map((artwork) => (
-                <article key={artwork.id} className="relative isolate flex flex-col justify-end overflow-hidden rounded-2xl bg-gray-900 px-8 pb-8 pt-80">
-                  <img
-                    src={artwork.images[0]?.url}
-                    alt={artwork.title}
-                    className="absolute inset-0 -z-10 h-full w-full object-cover"
-                  />
-                  <div className="absolute inset-0 -z-10 bg-gradient-to-t from-gray-900 via-gray-900/40" />
-                  <div className="absolute inset-0 -z-10 rounded-2xl ring-1 ring-inset ring-gray-900/10" />
-                  
-                  <div className="flex flex-wrap items-center gap-y-1 overflow-hidden text-sm leading-6 text-gray-300">
-                    <h3 className="text-white font-semibold">
-                      <span className="absolute inset-0" />
-                      {artwork.title}
-                    </h3>
-                    <span className="text-gray-400">{artwork.artist.name}</span>
-                  </div>
-                  
-                  <div className="mt-4">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      artwork.status === 'Available' ? 'bg-green-100 text-green-800' :
-                      artwork.status === 'Reserved' ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-red-100 text-red-800'
-                    }`}>
-                      {artwork.status === 'Available' ? '販売中' :
-                       artwork.status === 'Reserved' ? '予約済み' : '売却済み'}
-                    </span>
-                  </div>
-                </article>
               ))}
-            </div>
-            <div className="mt-12 text-center">
-              <Link href="/gallery" className="btn-primary">
-                ギャラリーを見る
-              </Link>
             </div>
           </div>
         </section>
-      )}
 
-      {/* ニュースセクション */}
-      {news.length > 0 && (
-        <section className="section-padding">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                ニュース
-              </h2>
-              <p className="mt-4 text-lg text-gray-600">
-                最新のお知らせ
-              </p>
-            </div>
-            <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-              {news.map((item) => (
-                <article key={item.id} className="card">
-                  <time dateTime={item.date} className="text-gray-500 text-sm">
-                    {new Date(item.date).toLocaleDateString('ja-JP')}
-                  </time>
-                  <div className="group relative mt-4">
-                    <h3 className="text-lg font-semibold text-gray-900 group-hover:text-primary-600">
-                      <Link href={`/news/${item.slug}`}>
-                        <span className="absolute inset-0" />
-                        {item.title}
-                      </Link>
-                    </h3>
-                    <p className="mt-4 line-clamp-3 text-sm text-gray-600">
-                      {item.body.replace(/<[^>]*>/g, '').substring(0, 100)}...
-                    </p>
-                  </div>
-                </article>
+        <section id="gallery" className="bg-slate-50 py-16">
+          <div className="mx-auto max-w-5xl px-6">
+            <h2 className="text-2xl font-semibold">ギャラリー</h2>
+            <p className="mt-4 max-w-2xl text-sm text-slate-600">
+              作品情報はmicroCMSから取得する想定です。現在は準備中のため、
+              公開まで今しばらくお待ちください。
+            </p>
+          </div>
+        </section>
+
+        <section id="news" className="py-16">
+          <div className="mx-auto max-w-5xl px-6">
+            <h2 className="text-2xl font-semibold">ニュース</h2>
+            <ul className="mt-6 divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white">
+              {newsItems.map((item) => (
+                <li key={item.title} className="flex flex-col gap-2 px-6 py-4 md:flex-row md:items-center">
+                  <span className="text-sm text-slate-500">{item.date}</span>
+                  <span className="text-sm font-medium text-slate-800">
+                    {item.title}
+                  </span>
+                </li>
               ))}
-            </div>
-            <div className="mt-12 text-center">
-              <Link href="/news" className="btn-primary">
-                ニュース一覧を見る
-              </Link>
+            </ul>
+          </div>
+        </section>
+
+        <section id="company" className="bg-slate-50 py-16">
+          <div className="mx-auto max-w-5xl px-6">
+            <h2 className="text-2xl font-semibold">会社情報</h2>
+            <div className="mt-6 grid gap-4 text-sm text-slate-700">
+              <div className="flex flex-col gap-1 border-b border-slate-200 pb-4 md:flex-row md:gap-6">
+                <span className="w-28 font-medium">社名</span>
+                <span>株式会社由岳</span>
+              </div>
+              <div className="flex flex-col gap-1 border-b border-slate-200 pb-4 md:flex-row md:gap-6">
+                <span className="w-28 font-medium">事業内容</span>
+                <span>アプリ制作 / 美術品取扱 / SNS運用支援</span>
+              </div>
+              <div className="flex flex-col gap-1 md:flex-row md:gap-6">
+                <span className="w-28 font-medium">所在地</span>
+                <span>神奈川県横浜市（詳細はお問い合わせください）</span>
+              </div>
             </div>
           </div>
         </section>
-      )}
 
-      {/* 会社概要セクション */}
-      <section className="section-padding bg-white">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              会社概要
-            </h2>
-          </div>
-          <div className="mx-auto mt-16 max-w-2xl">
-            <div className="card">
-              <p className="text-gray-600 mb-6">
-                株式会社由岳は、デジタル領域（アプリ開発）と芸術領域（美術品取扱）を横断し、価値の創造と発信を支援するクリエイティブカンパニーです。
-              </p>
-              <dl className="divide-y divide-gray-100">
-                <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt className="text-sm font-medium leading-6 text-gray-900">会社名</dt>
-                  <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">株式会社由岳（ゆがく）</dd>
-                </div>
-                <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt className="text-sm font-medium leading-6 text-gray-900">設立</dt>
-                  <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">2025年3月</dd>
-                </div>
-                <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt className="text-sm font-medium leading-6 text-gray-900">代表者</dt>
-                  <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">青山 遥（ビジネスネーム）</dd>
-                </div>
-                <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt className="text-sm font-medium leading-6 text-gray-900">所在地</dt>
-                  <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">神奈川県横浜市</dd>
-                </div>
-                <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt className="text-sm font-medium leading-6 text-gray-900">事業内容</dt>
-                  <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                    アプリの企画・開発／美術品の取扱／SNS運用支援（紹介制）
-                  </dd>
-                </div>
-              </dl>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTAセクション */}
-      <section className="section-padding bg-secondary-900 text-white">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-              ご相談はお気軽に
-            </h2>
-            <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-300">
-              アプリ制作や美術品に関するお問い合わせは、お気軽にご相談ください。
+        <section id="contact" className="py-16">
+          <div className="mx-auto max-w-5xl px-6">
+            <h2 className="text-2xl font-semibold">お問い合わせ</h2>
+            <p className="mt-4 max-w-2xl text-sm text-slate-600">
+              事業に関するご相談は、お問い合わせフォームよりご連絡ください。
             </p>
-            <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/contact?type=app" className="btn-primary">
-                アプリ制作の相談
-              </Link>
-              <Link href="/contact?type=artwork" className="btn-secondary">
-                作品・委託の相談
-              </Link>
+            <div className="mt-6 inline-flex rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white">
+              /contact へ移動
             </div>
           </div>
+        </section>
+      </main>
+
+      <footer className="border-t border-slate-200 py-8">
+        <div className="mx-auto flex max-w-5xl flex-col gap-2 px-6 text-xs text-slate-500 md:flex-row md:items-center md:justify-between">
+          <span>© 2026 Yugaku Inc.</span>
+          <span>作品の色味は実物と異なる場合があります。</span>
         </div>
-      </section>
+      </footer>
     </div>
   );
 }
