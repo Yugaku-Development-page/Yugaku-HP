@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import ListPageNav from '@/components/ListPageNav';
 
 const typeLabels: Record<string, string> = {
   app: 'アプリ制作の相談',
@@ -39,6 +41,14 @@ export default function ContactPage() {
 
   return (
     <div className="bg-gray-50 min-h-screen">
+      <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
+          <Link href="/" className="text-sm font-semibold tracking-wide text-slate-900">
+            株式会社由岳
+          </Link>
+          <ListPageNav />
+        </div>
+      </header>
       <section className="bg-white">
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
