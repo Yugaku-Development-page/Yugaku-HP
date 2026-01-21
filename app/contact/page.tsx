@@ -19,12 +19,10 @@ export default function ContactPage() {
     const artworkId = searchParams.get('artworkId');
 
     if (type) {
-      const typeMap: { [key: string]: string } = {
-        'app': 'app',
-        'artwork': 'artwork',
-        'sns': 'sns',
-      };
-      setValue('type', typeMap[type] || 'other');
+      const contactTypes = ['app', 'artwork', 'other', 'sns'] as const;
+      const isContactType = (value: string): value is ContactForm['type'] =>
+        contactTypes.includes(value as ContactForm['type']);
+      setValue('type', isContactType(type) ? type : 'other');
     }
 
     if (artworkTitle) {
