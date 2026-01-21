@@ -16,18 +16,17 @@ const services = [
   },
 ];
 
-const newsItems = [
-  {
-    title: "コーポレートサイトを公開しました",
-    date: "2026.01.19",
-  },
-  {
-    title: "ギャラリー展示の準備を進めています",
-    date: "2026.01.10",
-  },
-];
+import Link from 'next/link';
+import { getArtworks, getNews } from '@/lib/microcms';
 
-export default function Home() {
+export const revalidate = 60;
+
+export default async function Home() {
+  const [artworks, newsItems] = await Promise.all([
+    getArtworks(6),
+    getNews(3),
+  ]);
+
   return (
     <div className="min-h-screen">
       <header className="border-b border-slate-200 bg-white/90 backdrop-blur">
@@ -92,25 +91,94 @@ export default function Home() {
           <div className="mx-auto max-w-5xl px-6">
             <h2 className="text-2xl font-semibold">ギャラリー</h2>
             <p className="mt-4 max-w-2xl text-sm text-slate-600">
-              作品情報はmicroCMSから取得する想定です。現在は準備中のため、
-              公開まで今しばらくお待ちください。
+              microCMSの最新作品を掲載しています。
             </p>
+            {artworks.length === 0 ? (
+              <p className="mt-6 text-sm text-slate-500">
+                現在公開中の作品はありません。
+              </p>
+            ) : (
+              <div className="mt-8 grid gap-6 md:grid-cols-3">
+                {artworks.map((artwork) => (
+                  <Link
+                    key={artwork.id}
+                    href={`/gallery/${artwork.slug}`}
+                    className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md"
+                  >
+                    <div className="aspect-[4/3] overflow-hidden bg-slate-100">
+                      <img
+                        src={artwork.images[0]?.url}
+                        alt={artwork.title}
+                        className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                      />
+                    </div>
+                    <div className="p-4">
+                      <p className="text-sm font-semibold text-slate-800">
+                        {artwork.title}
+                      </p>
+                      <p className="mt-1 text-xs text-slate-500">
+                        {artwork.artist.name}
+                      </p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+            <div className="mt-8">
+              <Link
+                href="/gallery"
+                className="inline-flex items-center text-sm font-medium text-slate-700 hover:text-slate-900"
+              >
+                ギャラリー一覧を見る →
+              </Link>
+            </div>
           </div>
         </section>
 
         <section id="news" className="py-16">
           <div className="mx-auto max-w-5xl px-6">
             <h2 className="text-2xl font-semibold">ニュース</h2>
-            <ul className="mt-6 divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white">
-              {newsItems.map((item) => (
-                <li key={item.title} className="flex flex-col gap-2 px-6 py-4 md:flex-row md:items-center">
-                  <span className="text-sm text-slate-500">{item.date}</span>
-                  <span className="text-sm font-medium text-slate-800">
-                    {item.title}
-                  </span>
-                </li>
-              ))}
-            </ul>
+            {newsItems.length === 0 ? (
+              <p className="mt-6 text-sm text-slate-500">
+                現在公開中のお知らせはありません。
+              </p>
+            ) : (
+              <ul className="mt-6 divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white">
+                {newsItems.map((item) => (
+                  <li
+                    key={item.id}
+                    className="flex flex-col gap-2 px-6 py-4 md:flex-row md:items-center md:justify-between"
+                  >
+                    <div className="flex flex-col gap-2 md:flex-row md:items-center">
+                      <span className="text-sm text-slate-500">
+                        {new Date(item.date).toLocaleDateString('ja-JP', {
+                          year: 'numeric',
+                          month: '2-digit',
+                          day: '2-digit',
+                        })}
+                      </span>
+                      <span className="text-sm font-medium text-slate-800">
+                        {item.title}
+                      </span>
+                    </div>
+                    <Link
+                      href={`/news/${item.slug}`}
+                      className="text-sm font-medium text-slate-700 hover:text-slate-900"
+                    >
+                      詳細 →
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <div className="mt-6">
+              <Link
+                href="/news"
+                className="inline-flex items-center text-sm font-medium text-slate-700 hover:text-slate-900"
+              >
+                ニュース一覧を見る →
+              </Link>
+            </div>
           </div>
         </section>
 
