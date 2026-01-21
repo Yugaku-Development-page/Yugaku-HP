@@ -1,9 +1,11 @@
-export const formatPrice = (price?: string) => {
-  if (!price) {
+type PriceInput = string | number | null | undefined;
+
+export const formatPrice = (price?: PriceInput) => {
+  if (price === null || price === undefined) {
     return '';
   }
 
-  const trimmed = price.trim();
+  const trimmed = typeof price === 'string' ? price.trim() : price.toString().trim();
   if (!trimmed) {
     return '';
   }
