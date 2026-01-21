@@ -1,5 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "株式会社由岳 - アートとデジタルで、価値を編集する",
@@ -14,7 +16,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <body className="font-sans">{children}</body>
+      <body className="font-sans bg-slate-50 text-slate-900">
+        <Header />
+        <main>{children}</main>
+        <Footer />
+      </body>
     </html>
   );
 }
