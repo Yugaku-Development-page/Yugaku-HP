@@ -93,6 +93,16 @@ export const getArtworkBySlug = async (slug: string) => {
     if (!cmsClient) {
       return null;
     }
+    try {
+      const response = await cmsClient.get({
+        endpoint: 'artworks',
+        contentId: slug,
+      });
+      return normalizeArtwork(response as Artwork);
+    } catch (error) {
+      console.warn('Fallback to slug query for artwork:', error);
+    }
+
     const response = await cmsClient.get({
       endpoint: 'artworks',
       queries: {
@@ -127,7 +137,7 @@ export const getArtists = async () => {
   }
 };
 
-export const getNews = async (limit = 10, offset = 0) => {
+export const getNews = async (limit = 100, offset = 0) => {
   try {
     const cmsClient = getClient();
     if (!cmsClient) {
@@ -138,7 +148,7 @@ export const getNews = async (limit = 10, offset = 0) => {
       queries: {
         limit,
         offset,
-        orders: '-date',
+        orders: '-date,-createdAt',
       },
     });
     return response.contents as News[];
