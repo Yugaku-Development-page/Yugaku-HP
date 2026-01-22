@@ -162,7 +162,7 @@ export default async function Home() {
                   >
                     <div className="flex flex-col gap-2 md:flex-row md:items-center">
                       <span className="text-sm text-slate-500">
-                        {new Date(item.date).toLocaleDateString('ja-JP', {
+                        {new Date(item.date ?? item.createdAt).toLocaleDateString('ja-JP', {
                           year: 'numeric',
                           month: '2-digit',
                           day: '2-digit',

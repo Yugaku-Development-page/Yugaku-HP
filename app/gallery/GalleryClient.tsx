@@ -23,13 +23,15 @@ export default function GalleryClient({ artworks, artists }: GalleryClientProps)
     status: '',
   });
 
-  const categories = useMemo(
-    () =>
-      Array.from(new Set(artworks.map((artwork) => artwork.category)))
-        .filter(Boolean)
-        .sort((a, b) => a.localeCompare(b, 'ja')),
-    [artworks],
-  );
+  const categories = useMemo(() => {
+    const normalized = artworks
+      .map((artwork) => artwork.category)
+      .filter((category): category is string => typeof category === 'string')
+      .map((category) => category.trim())
+      .filter(Boolean);
+
+    return Array.from(new Set(normalized)).sort((a, b) => a.localeCompare(b, 'ja'));
+  }, [artworks]);
 
   const statusLabels: Record<string, string> = {
     Available: '販売中',
