@@ -19,3 +19,9 @@ body {
 a {
   @apply transition-colors;
 }
+
+@layer components {
+  .section-padding {
+    @apply py-16 sm:py-20 lg:py-24;
+  }
+}

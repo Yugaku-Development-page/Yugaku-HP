@@ -66,7 +66,7 @@ export default async function NewsPage() {
                   </div>
                   <div className="group relative">
                     <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-primary-600">
-                      <Link href={`/news/${item.slug ?? item.id}`}>
+                      <Link href={`/news/${item.id}`}>
                         <span className="absolute inset-0" />
                         {item.title}
                       </Link>
@@ -78,7 +78,7 @@ export default async function NewsPage() {
                   </div>
                   <div className="mt-6">
                     <Link
-                      href={`/news/${item.slug ?? item.id}`}
+                      href={`/news/${item.id}`}
                       className="text-primary-600 hover:text-primary-700 text-sm font-medium"
                     >
                       記事を読む →

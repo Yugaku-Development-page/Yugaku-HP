@@ -78,6 +78,7 @@ export const getArtworks = async (limit = 100, offset = 0) => {
         limit,
         offset,
         orders: '-createdAt',
+        depth: 2,
       },
     });
     return (response.contents as Artwork[]).map(normalizeArtwork);
@@ -97,6 +98,9 @@ export const getArtworkBySlug = async (slug: string) => {
       const response = await cmsClient.get({
         endpoint: 'artworks',
         contentId: slug,
+        queries: {
+          depth: 2,
+        },
       });
       return normalizeArtwork(response as Artwork);
     } catch (error) {
@@ -108,6 +112,7 @@ export const getArtworkBySlug = async (slug: string) => {
       queries: {
         limit: 1,
         filters: `slug[equals]${slug}`,
+        depth: 2,
       },
     });
     const artwork = (response.contents as Artwork[])[0];
