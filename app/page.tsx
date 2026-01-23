@@ -173,7 +173,7 @@ export default async function Home() {
                       </span>
                     </div>
                     <Link
-                      href={`/news/${item.slug ?? item.id}`}
+                      href={`/news/${item.id}`}
                       className="text-sm font-medium text-slate-700 hover:text-slate-900"
                     >
                       詳細 →
